@@ -2,29 +2,23 @@
 
 class Admin_Task {
     
-        public function init_admin() {
+        public function init() {
             
-                // Initialising new Admin Model
-                $admin = new Admin();
-                
-                // Adding new user role
-                $check = $admin->add_user_role('Administrator');
+                $check = User_Role_Master::create(array('role_name' => 'Administrator'));
+                $check = $this->create_account();
                 
                 if ($check) {
-                        echo 'User Role added successfully!';
+                        echo 'Admin account successfully initialised!';
                         return TRUE;
                 }
                 else {
-                        echo 'User Role adding failed.';
+                        echo 'Initialisation failed.';
                         return FALSE;
                 }
             
         }
     
-        public function create_account() {
-
-                // Initialising new User Model
-                $user = new User();
+        private function create_account() {
                 
                 // Configuring credentials for admin account
                 $credentials = array(
@@ -33,15 +27,39 @@ class Admin_Task {
                     'role_name' =>  'Administrator',
                 );
                 
-                // Adding administrator account
-                $check = $user->create_account($credentials);
+                $check = false;
+                
+                $login_master = Login_Master::create(array(
+                    'user_name' => $credentials['user_name'],
+                    'password' => $credentials['password'],
+                    ));
+                
+                $login_master_idlogin_master = $login_master->id;
+                
+                if ($login_master_idlogin_master) {
+                    
+                        $user_details = User_Details::create(array('login_master_idlogin_master' => $login_master_idlogin_master));
+                        $iduser_details = $user_details->id;
+                        
+                        if ($iduser_details) {
+                            
+                                $user_role_master = User_Role_Master::where('role_name', '=', $credentials['role_name'])->first();
+                                $iduser_role_master = $user_role_master->id;
+                                
+                                $user_role_details = User_Role_Details::create(array(
+                                    'user_details_iduser_details' => $iduser_details,
+                                    'user_role_master_iduser_role_master' => $iduser_role_master,
+                                    ));
+                                
+                                $check = true;
+                        }
+                        
+                }
                 
                 if ($check) {
-                        echo 'Account successfully created!';
                         return TRUE;
                 }
                 else {
-                        echo 'Account creation failed.';
                         return FALSE;
                 }
 
