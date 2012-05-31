@@ -114,29 +114,9 @@ Route::filter('auth', function()
 /*
  * Custom Routes
  */
+
+// Registering home controller
 Route::controller('home');
 
-Route::post('home/login', function()
-{
-   
-        // Gathering all submitted inputs
-        $input = Input::all();
-
-        // Setting rules for the validation
-        $rules = array(
-            'username'  =>  'required',
-            'password'  =>  'required'
-        );
-        
-        $messages = array(
-            'required'  => 'We need you to fill the :attribute field',
-        );
-
-        $validation = Validator::make($input, $rules, $messages);
-
-        if ($validation->fails())
-        {
-                return Redirect::to('home/login')->with_errors($validation);
-        } 
-        
-});
+// Registering admin controller
+Route::controller('admin');

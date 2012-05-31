@@ -22,8 +22,8 @@
                                         <nav class="nav nav-collapse">
                                                 <ul class="nav">
                                                     @section('navigation')
-                                                    <li><a href="<?php echo url('home') ?>">Home</a></li>
-                                                    <li><a href="<?php echo url('home/login') ?>">Login</a></li>
+                                                    <li><a href="<?php echo url('admin') ?>">Home</a></li>
+                                                    <li><a href="<?php echo url('admin/login') ?>">Login</a></li>
                                                     @yield_section
                                                 </ul>
                                         </nav>
@@ -40,6 +40,7 @@
             
                 <div role="main" class="content">
                     
+                        <div class="alert alert-danger pull-right"><strong>Attention!</strong> Only admins allowed.</div>
                         @yield('content')
                         
                 </div>

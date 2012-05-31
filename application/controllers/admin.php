@@ -1,32 +1,32 @@
 <?php
 
-class Home_Controller extends Base_Controller {
+class Admin_Controller extends Base_Controller {
     
         public $restful = true;
     
         /**
-         * Home Page
+         * Admin Home Page
          * 
          * @return View
          */
 	public function get_index() {
                 IoC::resolve('init_asset');
-		return View::make('home.index');
+		return View::make('admin.index');
 	}
         
         /**
-         * Login Page
+         * Admin Login Page
          * 
          * @return View 
          */
         public function get_login() {
                 IoC::resolve('init_asset');
-                Log::info('This is the login page.');
-                return View::make('home.login');
+                Log::info('This is the administrator login page.');
+                return View::make('admin.login');
         }
         
         /**
-         * Validation on post from home/login
+         * Validation on post from admin/login
          * 
          * @return View
          */
@@ -50,7 +50,14 @@ class Home_Controller extends Base_Controller {
                 if ($validation->fails()) {
                         return Redirect::to('home/login')->with_errors($validation);
                 }
-        
-        }
+                else {
+                        $credentials = array('username' => Input::get('username'), 'password' => Input::get('password'));
 
+                        if (Auth::attempt($credentials)) {
+                                return Redirect::to('admin/dashboard');
+                        }
+                }
+
+        }
+        
 }

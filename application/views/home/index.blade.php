@@ -1,6 +1,8 @@
 @layout('home.master')
 
 @section('content')
-<h2>Home Page</h2>
-<p>This is the home page.</p>
+<div class="hero-unit">
+    <h1>Welcome!</h1>
+    <p>Please proceed to the <a href="<?php echo url('home/login') ?>">login page</a>.</p>
+</div>
 @endsection

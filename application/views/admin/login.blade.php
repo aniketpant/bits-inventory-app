@@ -1,9 +1,9 @@
-@layout('home.master')
+@layout('admin.master')
 
 @section('content')
-<h1 class="page-header">Login</h1>
+<h1 class="page-header">Administrator Login <small>Please sign in with your administrator credentials</small></h1>
 <div class="well form-horizontal">
-        <?php echo Form::open('home/login'); ?>
+        <?php echo Form::open('admin/login'); ?>
         <div class="control-group <?php if($errors->has('username')) echo 'error'; ?>">
                 <?php echo Form::label('username', 'Username', array('class' => 'control-label')); ?>
                 <div class="controls">

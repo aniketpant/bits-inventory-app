@@ -171,3 +171,16 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 {
 	Session::load();
 }
+
+/*
+ * IoC Container 
+ */
+
+IoC::register('init_asset', function()
+{
+        Asset::add('bootstrap', 'css/bootstrap.min.css');
+        Asset::add('stylesheet', 'css/style.css');
+        Asset::add('bootstrap', 'js/bootstrap.min.js');
+        Asset::add('prefixfree', 'js/prefixfree.min.js');
+        Asset::add('jquery', 'js/jquery.js');
+});

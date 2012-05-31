@@ -55,6 +55,6 @@ return array(
 	|
 	*/
 
-	'table' => 'users',
+	'table' => 'login_master',
 
 );
