@@ -12,10 +12,14 @@ class Create_User_Details {
 		Schema::create('user_details', function($table) {
                     
                         // auto incremental id (PK)
-                        $table->increments('iduser_details');
+                        $table->increments('id');
                         
                         // integer
                         $table->integer('psrn');
+                        $table->integer('login_master_idlogin_master');
+                        
+                        // foreign keys
+                        $table->foreign('login_master_idlogin_master')->references('id')->on('login_master')->on_delete('restrict');
                         
                 });
 	}
@@ -27,7 +31,7 @@ class Create_User_Details {
 	 */
 	public function down()
 	{
-		//
+                Schema::drop('user_details');
 	}
 
 }

@@ -12,7 +12,7 @@ class Create_Login_Master {
 		Schema::create('login_master', function($table) {
                     
                         // auto incremental id (PK)
-                        $table->increments('idlogin_master');
+                        $table->increments('id');
                         
                         // varchar 45
                         $table->string('user_name', 45);
