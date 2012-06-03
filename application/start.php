@@ -176,11 +176,19 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
  * IoC Container 
  */
 
-IoC::register('init_asset', function()
+IoC::register('init_assets', function()
 {
         Asset::add('bootstrap', 'css/bootstrap.min.css');
+        Asset::add('bootstrap-responsive', 'css/bootstrap-responsive.min.css');
         Asset::add('stylesheet', 'css/style.css');
+        Asset::add('jquery', 'js/jquery.js');
         Asset::add('bootstrap', 'js/bootstrap.min.js');
         Asset::add('prefixfree', 'js/prefixfree.min.js');
-        Asset::add('jquery', 'js/jquery.js');
+        Asset::add('bootstrap-collapse', 'js/bootstrap-collapse.js');
+        Asset::add('bootstrap-transition', 'js/bootstrap-transition.js');
 });
+
+/*
+ * Pivot timestamps
+ */
+Laravel\Database\Eloquent\Pivot::$timestamps = false;
