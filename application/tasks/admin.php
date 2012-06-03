@@ -29,26 +29,26 @@ class Admin_Task {
                 
                 $check = false;
                 
-                $login_master = Login_Master::create(array(
+                $user_master = User_Master::create(array(
                     'user_name' => $credentials['user_name'],
                     'password' => $credentials['password'],
                     ));
                 
-                $login_master_idlogin_master = $login_master->id;
+                $user_master_id = $user_master->id;
                 
-                if ($login_master_idlogin_master) {
+                if ($user_master_id) {
                     
-                        $user_details = User_Details::create(array('login_master_idlogin_master' => $login_master_idlogin_master));
-                        $iduser_details = $user_details->id;
+                        $user_details = User_Details::create(array('user_master_id' => $user_master_id));
+                        $user_details_id = $user_details->id;
                         
-                        if ($iduser_details) {
+                        if ($user_details_id) {
                             
                                 $user_role_master = User_Role_Master::where('role_name', '=', $credentials['role_name'])->first();
-                                $iduser_role_master = $user_role_master->id;
+                                $user_role_master_id = $user_role_master->id;
                                 
                                 $user_role_details = User_Role_Details::create(array(
-                                    'user_details_iduser_details' => $iduser_details,
-                                    'user_role_master_iduser_role_master' => $iduser_role_master,
+                                    'user_details_id' => $user_details_id,
+                                    'user_role_master_id' => $user_role_master_id,
                                     ));
                                 
                                 $check = true;
