@@ -19,12 +19,24 @@
                                 <div class="container">
                                     
                                         <a class="brand" href="<?php echo url('home') ?>">Inventory Management System</a>
-                                        <nav class="nav nav-collapse">
-                                                <ul class="nav">
-                                                    @section('navigation')
-                                                    <li><a href="<?php echo url('admin') ?>">Home</a></li>
-                                                    <li><a href="<?php echo url('admin/login') ?>">Login</a></li>
-                                                    @yield_section
+                                        
+                                        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+                                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        </a>
+                                        
+                                        <nav>
+                                                <ul class="nav nav-collapse">
+                                                        @if(Auth::check())
+                                                                <li><a href="<?php echo url('admin/dashboard/base') ?>">Dashboard</a></li>
+                                                                <li><a href="<?php echo url('admin/dashboard/controls') ?>">Controls</a></li>
+                                                                <li><a href="<?php echo url('admin/logout') ?>">Logout</a></li>
+                                                        @else
+                                                                <li><a href="<?php echo url('admin') ?>">Home</a></li>
+                                                                <li><a href="<?php echo url('admin/login') ?>">Login</a></li>
+                                                        @endif
                                                 </ul>
                                         </nav>
                                         
@@ -50,7 +62,9 @@
         <div class="container">
             
                 <footer role="contentinfo" class="footer">
-                        <p class="attr pull-right">&copy; <strong>BITS</strong> Pilani, K K Birla Goa Campus</p>
+                        <div class="attr">
+                            <p class="bits pull-right">&copy; <strong>BITS</strong> Pilani, K K Birla Goa Campus</p>
+                        </div>
                 </footer>
             
         </div>
