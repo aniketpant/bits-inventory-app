@@ -10,7 +10,7 @@ class Admin_Controller extends Base_Controller {
          * @return View
          */
 	public function get_index() {
-                IoC::resolve('init_asset');
+                IoC::resolve('init_assets');
 		return View::make('admin.index');
 	}
         
@@ -20,8 +20,7 @@ class Admin_Controller extends Base_Controller {
          * @return View 
          */
         public function get_login() {
-                IoC::resolve('init_asset');
-                Log::info('This is the administrator login page.');
+                IoC::resolve('init_assets');
                 return View::make('admin.login');
         }
         
@@ -48,16 +47,34 @@ class Admin_Controller extends Base_Controller {
                 $validation = Validator::make($input, $rules, $messages);
 
                 if ($validation->fails()) {
-                        return Redirect::to('home/login')->with_errors($validation);
+                        return Redirect::to('admin/login')->with_errors($validation)->with_input('only', 'username');
                 }
                 else {
                         $credentials = array('username' => Input::get('username'), 'password' => Input::get('password'));
 
                         if (Auth::attempt($credentials)) {
-                                return Redirect::to('admin/dashboard');
+                                $user_master = User_Master::where('user_name', '=', $credentials['username'])->first();
+                                $user_details = $user_master->user_details;
+                                $user_role = $user_details->user_role()->first();
+                                $role_name = $user_role->role_name;
+
+                                if ($role_name == 'Administrator') {
+                                        return Redirect::to('admin/dashboard');
+                                }
+                                else {
+                                        Auth::logout();
+                                }
                         }
                 }
 
+        }
+        
+        public function get_logout() {
+            
+                Auth::logout();
+                IoC::resolve('init_assets');
+                return View::make('admin.logged-out');
+            
         }
         
 }
