@@ -15,12 +15,12 @@ class Create_User_Role_Details {
                         $table->increments('id');
                         
                         // integer
-                        $table->integer('user_details_iduser_details');
-                        $table->integer('user_role_master_iduser_role_master');
+                        $table->integer('user_details_id');
+                        $table->integer('user_role_master_id');
                         
                         // foreign keys
-                        $table->foreign('user_details_iduser_details')->references('id')->on('user_details')->on_delete('restrict');
-                        $table->foreign('user_role_master_iduser_role_master')->references('id')->on('user_role_master')->on_delete('restrict');
+                        $table->foreign('user_details_id')->references('id')->on('user_details')->on_delete('restrict');
+                        $table->foreign('user_role_master_id')->references('id')->on('user_role_master')->on_delete('restrict');
                         
                 });
 	}

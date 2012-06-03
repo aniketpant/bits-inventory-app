@@ -16,10 +16,10 @@ class Create_User_Details {
                         
                         // integer
                         $table->integer('psrn');
-                        $table->integer('login_master_idlogin_master');
+                        $table->integer('user_master_id');
                         
                         // foreign keys
-                        $table->foreign('login_master_idlogin_master')->references('id')->on('login_master')->on_delete('restrict');
+                        $table->foreign('user_master_id')->references('id')->on('user_master')->on_delete('restrict');
                         
                 });
 	}
