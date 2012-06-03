@@ -29,7 +29,7 @@ return array(
 	|
 	*/
 
-	'username' => 'username',
+	'username' => 'user_name',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return array(
 	|
 	*/
 
-	'model' => 'User',
+	'model' => 'User_Master',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -55,6 +55,6 @@ return array(
 	|
 	*/
 
-	'table' => 'login_master',
+	'table' => 'user_master',
 
 );
