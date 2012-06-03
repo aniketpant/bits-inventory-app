@@ -118,5 +118,8 @@ Route::filter('auth', function()
 // Registering home controller
 Route::controller('home');
 
-// Registering admin controller
+// Registering admin controllers
+Route::controller('admin.dashboard.base');
+Route::controller('admin.dashboard.controls');
+Route::controller('admin.dashboard');
 Route::controller('admin');
