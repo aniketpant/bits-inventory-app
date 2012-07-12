@@ -59,7 +59,7 @@ class Admin_Controller extends Base_Controller {
                                 $role_name = $user_role->role_name;
 
                                 if ($role_name == 'Administrator') {
-                                        return Redirect::to('admin/dashboard');
+                                        return Redirect::to('admin/dashboard/base');
                                 }
                                 else {
                                         Auth::logout();

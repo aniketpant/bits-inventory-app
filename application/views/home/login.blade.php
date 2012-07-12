@@ -21,6 +21,7 @@
                         <?php echo Form::submit('Login', array('class' => 'btn btn-success')) ?>
                 </div>
         </div>
+        <?php echo Form::close(); ?>
 </div>
 <?php
 if($errors):
