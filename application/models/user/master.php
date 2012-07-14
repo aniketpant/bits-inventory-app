@@ -6,7 +6,7 @@ class User_Master extends Eloquent {
         public static $hidden = array('password');
         public static $timestamps = true;
         
-        public function user_details() {
+        public function details() {
                 return $this->has_one('User_Details');
         }
     
