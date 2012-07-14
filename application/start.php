@@ -178,14 +178,25 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 
 IoC::register('init_assets', function()
 {
+        /* Bootstrap */
         Asset::add('bootstrap', 'css/bootstrap.min.css');
         Asset::add('bootstrap-responsive', 'css/bootstrap-responsive.min.css');
-        Asset::add('stylesheet', 'css/style.css');
-        Asset::add('jquery', 'js/jquery.js');
-        Asset::add('bootstrap', 'js/bootstrap.min.js');
-        Asset::add('prefixfree', 'js/prefixfree.min.js');
         Asset::add('bootstrap-collapse', 'js/bootstrap-collapse.js');
         Asset::add('bootstrap-transition', 'js/bootstrap-transition.js');
+        Asset::add('bootstrap', 'js/bootstrap.min.js');
+        
+        /* Custom Stylesheet */
+        Asset::add('stylesheet', 'css/style.css');
+        
+        /* jQuery */
+        Asset::add('jquery', 'js/jquery.js');
+        
+        /* Prefixfree */
+        Asset::add('prefixfree', 'js/prefixfree.min.js');
+        
+        /* jQuery Select2 */
+        Asset::add('select2-css', 'css/select2.css');
+        Asset::add('select2-js', 'js/select2.min.js');
 });
 
 /*
