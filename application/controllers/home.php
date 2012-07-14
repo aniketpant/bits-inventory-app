@@ -50,6 +50,9 @@ class Home_Controller extends Base_Controller {
                 if ($validation->fails()) {
                         return Redirect::to('home/login')->with_errors($validation);
                 }
+                else {
+                        return Redirect::to('user/dashboard')->with_errors($validation);
+                }
         
         }
 

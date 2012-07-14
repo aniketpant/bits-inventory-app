@@ -54,8 +54,8 @@ class Admin_Controller extends Base_Controller {
 
                         if (Auth::attempt($credentials)) {
                                 $user_master = User_Master::where('user_name', '=', $credentials['username'])->first();
-                                $user_details = $user_master->user_details;
-                                $user_role = $user_details->user_role()->first();
+                                $user_details = $user_master->details;
+                                $user_role = $user_details->role()->first();
                                 $role_name = $user_role->role_name;
 
                                 if ($role_name == 'Administrator') {
@@ -63,6 +63,7 @@ class Admin_Controller extends Base_Controller {
                                 }
                                 else {
                                         Auth::logout();
+                                        return Redirect::to('admin/login');
                                 }
                         }
                 }
