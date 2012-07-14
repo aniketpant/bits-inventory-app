@@ -57,6 +57,8 @@
                         
                 </div>
             
+                @yield('errors')
+            
         </div>
         
         <div class="container">
@@ -68,6 +70,8 @@
                 </footer>
             
         </div>
+    
+    @yield('scripts')
         
 </body>
 </html>

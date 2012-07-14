@@ -1,17 +1,17 @@
 @layout('admin.master')
 
 @section('content')
-<h1 class="page-header">Manage User Roles</h1>
+<h1 class="page-header">Manage Locations</h1>
 <div class="well">
-    <h3>Existing User Roles</h3>
+    <h3>Existing Locations</h3>
     <?php
-        if ($user_roles):
+        if ($locations):
     ?>
         <ul>
     <?php
-            foreach ($user_roles as $user_role):
+            foreach ($locations as $locations):
     ?>
-            <li><?php echo $user_role->role_name ?></li>
+            <li><?php echo $locations->location_name ?></li>
     <?php
             endforeach;
     ?>
@@ -20,18 +20,18 @@
         else:
     ?>
         <p>
-            No user roles exist!
+            No locations exist!
         </p>
     <?php
         endif;
     ?>
 </div>
 <div class="form-horizontal">
-    <?php echo Form::open('admin/dashboard/controls/manage_user_roles'); ?>
-    <div class="control-group <?php if($errors->has('user_role_name')) echo 'error'; ?>">
-            <?php echo Form::label('user_role_name', 'New User Role', array('class' => 'control-label')); ?>
+    <?php echo Form::open('admin/dashboard/controls/manage_locations'); ?>
+    <div class="control-group <?php if($errors->has('location_name')) echo 'error'; ?>">
+            <?php echo Form::label('location_name', 'New Location', array('class' => 'control-label')); ?>
             <div class="controls">
-                    <?php echo Form::input('user_role_name', 'user_role_name', Input::old('user_role_name')) ?>
+                    <?php echo Form::input('location_name', 'location_name', Input::old('location_name')) ?>
             </div>
     </div>
     <div class="control-group">

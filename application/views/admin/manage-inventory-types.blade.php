@@ -1,17 +1,17 @@
 @layout('admin.master')
 
 @section('content')
-<h1 class="page-header">Manage User Roles</h1>
+<h1 class="page-header">Manage Locations</h1>
 <div class="well">
-    <h3>Existing User Roles</h3>
+    <h3>Existing Inventory Types</h3>
     <?php
-        if ($user_roles):
+        if ($inventory_types):
     ?>
         <ul>
     <?php
-            foreach ($user_roles as $user_role):
+            foreach ($inventory_types as $type):
     ?>
-            <li><?php echo $user_role->role_name ?></li>
+            <li><?php echo $type->inventory_type_name ?></li>
     <?php
             endforeach;
     ?>
@@ -20,18 +20,18 @@
         else:
     ?>
         <p>
-            No user roles exist!
+            No inventory types exist!
         </p>
     <?php
         endif;
     ?>
 </div>
 <div class="form-horizontal">
-    <?php echo Form::open('admin/dashboard/controls/manage_user_roles'); ?>
-    <div class="control-group <?php if($errors->has('user_role_name')) echo 'error'; ?>">
-            <?php echo Form::label('user_role_name', 'New User Role', array('class' => 'control-label')); ?>
+    <?php echo Form::open('admin/dashboard/controls/manage_inventory_types'); ?>
+    <div class="control-group <?php if($errors->has('inventory_type_name')) echo 'error'; ?>">
+            <?php echo Form::label('inventory_type_name', 'New Inventory Type', array('class' => 'control-label')); ?>
             <div class="controls">
-                    <?php echo Form::input('user_role_name', 'user_role_name', Input::old('user_role_name')) ?>
+                    <?php echo Form::input('inventory_type_name', 'inventory_type_name', Input::old('inventory_type_name')) ?>
             </div>
     </div>
     <div class="control-group">
