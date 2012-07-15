@@ -16,11 +16,11 @@ class Create_Inventory_Type_Details {
                         
                         // integer
                         $table->integer('inventory_type_master_id');
-                        $table->integer('user_details_id');
+                        $table->integer('user_role_master_id');
                         
                         // foreign keys
                         $table->foreign('inventory_type_master_id')->references('id')->on('inventory_type_master')->on_delete('restrict');
-                        $table->foreign('user_details_id')->references('id')->on('user_details')->on_delete('restrict');
+                        $table->foreign('user_role_master_id')->references('id')->on('user_role_master')->on_delete('restrict');
                         
                 });
 	}

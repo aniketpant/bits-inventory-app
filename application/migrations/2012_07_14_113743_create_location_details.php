@@ -16,11 +16,11 @@ class Create_Location_Details {
                         
                         // integer
                         $table->integer('location_master_id');
-                        $table->integer('user_role_master_id');
+                        $table->integer('user_details_id');
                         
                         // foreign keys
                         $table->foreign('location_master_id')->references('id')->on('location_master')->on_delete('restrict');
-                        $table->foreign('user_role_master_id')->references('id')->on('user_role_master')->on_delete('restrict');
+                        $table->foreign('user_details_id')->references('id')->on('user_details')->on_delete('restrict');
                         
                 });
 	}
