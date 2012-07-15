@@ -6,4 +6,4 @@ A simple inventory allotment app for the college.
 
  * Laravel
  * Twitter Bootstrap
- * Custard
+ * jQuery Select2
