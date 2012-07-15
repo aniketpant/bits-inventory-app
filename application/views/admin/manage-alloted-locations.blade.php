@@ -1,16 +1,16 @@
 @layout('admin.master')
 
 @section('content')
-<h1 class="page-header">Manage Locations</h1>
+<h1 class="page-header">Manage Alloted Locations</h1>
 <div class="form-horizontal">
     <?php echo Form::open('admin/dashboard/controls/manage_alloted_locations'); ?>
     <?php
         foreach ($users as $user):
     ?>
     <div class="control-group">
-            <?php echo Form::label('user-' . $user->user_name . '[]', $user->user_name, array('class' => 'control-label')) ?>
+            <?php echo Form::label($user->user_name . '[]', $user->user_name, array('class' => 'control-label')) ?>
             <div class="controls">
-                    <?php echo Form::select('user-' . $user->user_name . '[]', $locations, Input::old('user-' . $user->user_name), array('class' => 'input-location' , 'multiple')) ?>
+                    <?php echo Form::select($user->user_name . '[]', $locations, $user_location[$user->user_name], array('class' => 'input-location' , 'multiple')) ?>
             </div>
     </div>
     <?php
