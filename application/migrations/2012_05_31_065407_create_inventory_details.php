@@ -15,18 +15,11 @@ class Create_Inventory_Details {
                         $table->increments('id');
                         
                         // integer
-                        $table->integer('user_role_details_id');
-                        $table->integer('location_master_id');
-                        $table->integer('item_type_master_id');
-                        $table->integer('quantity');
+                        $table->integer('inventory_type_details_id');
+                        $table->integer('location_details_id');
                         
                         // varchar 32
-                        $table->string('value', 32);
-                        
-                        // foreign keys
-                        $table->foreign('user_role_details_id')->references('id')->on('user_role_details')->on_delete('restrict');
-                        $table->foreign('location_master_id')->references('id')->on('location_master')->on_delete('restrict');
-                        $table->foreign('item_type_master_id')->references('id')->on('item_type_master')->on_delete('restrict');
+                        $table->string('value', 60);
                         
                 });
 	}
