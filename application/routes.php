@@ -93,6 +93,7 @@ Event::listen('500', function()
 Route::filter('before', function()
 {
 	// Do stuff before every request to your application...
+        IoC::resolve('init_assets');
 });
 
 Route::filter('after', function($response)
@@ -107,7 +108,8 @@ Route::filter('csrf', function()
 
 Route::filter('auth', function()
 {
-	if (Auth::guest()) return Redirect::to('login');
+	if (!Auth::check()) return Redirect::to('user/login');
+        
 });
 
 
@@ -123,3 +125,7 @@ Route::controller('admin.dashboard.base');
 Route::controller('admin.dashboard.controls');
 Route::controller('admin.dashboard');
 Route::controller('admin');
+
+// Adding filters
+Route::filter('pattern: user/dashboard/*', 'auth');
+Route::filter('pattern: admin/dashboard/*', 'auth');
