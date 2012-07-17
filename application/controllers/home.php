@@ -10,7 +10,6 @@ class Home_Controller extends Base_Controller {
          * @return View
          */
 	public function get_index() {
-                IoC::resolve('init_assets');
 		return View::make('home.index');
 	}
         
@@ -20,7 +19,6 @@ class Home_Controller extends Base_Controller {
          * @return View 
          */
         public function get_login() {
-                IoC::resolve('init_assets');
                 Log::info('This is the login page.');
                 return View::make('home.login');
         }

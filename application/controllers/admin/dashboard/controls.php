@@ -4,31 +4,34 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
     
         public $restful = true;
         
+        /**
+         * get_index
+         * Returns the controls page if Authentication successful
+         */
+        
         public function get_index() {
             
-                if (Auth::check()) {
-                        IoC::resolve('init_assets');
-                        return View::make('admin.controls');
-                }
-                else {
-                        return Redirect::to('admin/login');
-                }
+                return View::make('admin.controls');
             
         }
         
+        /**
+         * get_manage_user_roles
+         * Returns the manage-user-roles page if Authentication successful
+         */
+        
         public function get_manage_user_roles() {
             
-                if (Auth::check()) {
-                        $user_roles = User_Role_Master::get();
-                        
-                        IoC::resolve('init_assets');        
-                        return View::make('admin.manage-user-roles')->with(array('user_roles' => $user_roles));
-                }
-                else {
-                        return Redirect::to('admin/login');
-                }
+                $user_roles = User_Role_Master::get();
+
+                return View::make('admin.manage-user-roles')->with(array('user_roles' => $user_roles));
                 
         }
+        
+        /**
+         * post_manage_user_roles
+         * Stores the input user_role in the database
+         */
         
         public function post_manage_user_roles() {
             
@@ -64,12 +67,16 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 
         }
         
+        /**
+         * get_manage_locations
+         * Returns the manage-locations page if Authentication successful
+         */
+        
         public function get_manage_locations() {
             
                 if (Auth::check()) {
                         $locations = Location_Master::get();
                         
-                        IoC::resolve('init_assets');        
                         return View::make('admin.manage-locations')->with(array('locations' => $locations));
                 }
                 else {
@@ -77,6 +84,11 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 }
                 
         }
+        
+        /**
+         * post_manage_locations
+         * Stores the input location in the database
+         */
         
         public function post_manage_locations() {
             
@@ -112,6 +124,10 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 
         }
         
+        /**
+         * get_manage_users
+         * Returns the manage-users page if Authentication successful
+         */
         
         public function get_manage_users() {
             
@@ -124,7 +140,6 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                             $user_roles[$user_role->role_name] = $user_role->role_name;
                         }
                         
-                        IoC::resolve('init_assets');        
                         return View::make('admin.manage-users')->with(array('users' => $users, 'user_roles' => $user_roles));
                 }
                 else {
@@ -132,6 +147,11 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 }
                 
         }
+        
+        /**
+         * post_manage_users
+         * Stores the input user data in the database
+         */
         
         public function post_manage_users() {
             
@@ -195,14 +215,16 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 
         }
         
-        
+        /**
+         * get_manage_inventory_types
+         * Returns the manage-inventory-types page if Authentication successful
+         */
         
         public function get_manage_inventory_types() {
             
                 if (Auth::check()) {
                         $inventory_types = Inventory_Type_Master::get();
                         
-                        IoC::resolve('init_assets');        
                         return View::make('admin.manage-inventory-types')->with(array('inventory_types' => $inventory_types));
                 }
                 else {
@@ -210,6 +232,12 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 }
                 
         }
+        
+        
+        /**
+         * post_manage_inventory_types
+         * Stores the input inventory_type in the database
+         */
         
         public function post_manage_inventory_types() {
             
@@ -245,6 +273,11 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 
         }
         
+        /**
+         * get_manage_alloted_locations
+         * Returns the manage-alloted-locations page if Authentication successful
+         */
+        
         public function get_manage_alloted_locations() {
             
                 if (Auth::check()) {
@@ -267,7 +300,6 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                             
                         }
                         
-                        IoC::resolve('init_assets');        
                         return View::make('admin.manage-alloted-locations')->with(array('locations' => $locations, 'users' => $users, 'user_location' => $user_location));
                 }
                 else {
@@ -275,6 +307,11 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 }
                 
         }
+        
+        /**
+         * post_manage_alloted_location
+         * Stores the input related data for user and location in the database
+         */
         
         public function post_manage_alloted_locations() {
             
@@ -321,6 +358,11 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 
         }
         
+        /**
+         * get_manage_alloted_inventory_types
+         * Returns the manage-alloted-inventory-types page if Authentication successful
+         */
+        
         public function get_manage_alloted_inventory_types() {
             
                 if (Auth::check()) {
@@ -343,7 +385,6 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                             
                         }
                         
-                        IoC::resolve('init_assets');        
                         return View::make('admin.manage-alloted-inventory-types')->with(array('user_roles' => $user_roles, 'inventory_types' => $inventory_types, 'user_role_inventory_types' => $user_role_inventory_types));
                 }
                 else {
@@ -351,6 +392,11 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 }
                 
         }
+        
+        /**
+         * post_manage_alloted_inventory_types
+         * Stores the input related data for user_role and inventory_type in the database
+         */
         
         public function post_manage_alloted_inventory_types() {
             
@@ -397,6 +443,64 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                         return Redirect::to('admin/login');
                 }
                 
+        }
+        
+        /**
+         * get_manage_alloted_inventory
+         * Returns the manage-alloted-inventory page if Authentication successful
+         */
+        
+        public function get_manage_alloted_inventory() {
+            
+                if (Auth::check()) {
+                        $users = User_Master::with('details')->get();
+                    
+                        return View::make('admin.manage-alloted-inventory')->with(array('users' => $users));
+                }
+                else {
+                        return Redirect::to('admin/login');
+                }
+                
+        }
+        
+        /**
+         * post_manage_alloted_inventory
+         * Stores the input related data for users and alloted inventory in the database
+         */
+        
+        public function post_manage_alloted_inventory() {
+            
+                if (Auth::check()) {
+                        // Gathering all submitted inputs
+                        $input = Input::all();
+
+                        // Setting rules for the validation
+                        $rules = array(
+                        );
+
+                        $messages = array(
+                        );
+
+                        $validation = Validator::make($input, $rules, $messages);
+
+                        if ($validation->fails()) {
+                                return Redirect::to('admin/dashboard/controls/manage_alloted_inventory')->with_errors($validation)->with_input('only', 'inventory_type_name');
+                        }
+                        else {
+                                return Redirect::to('admin/dashboard/controls/manage_alloted_inventory');
+                        }
+                }
+                else {
+                        return Redirect::to('admin/login');
+                }
+                
+        }
+        
+        public function get_user_locations($id) {
+            
+                echo $id;
+                return;
+            
         }
     
 }

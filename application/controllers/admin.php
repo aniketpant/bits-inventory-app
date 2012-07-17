@@ -10,7 +10,6 @@ class Admin_Controller extends Base_Controller {
          * @return View
          */
 	public function get_index() {
-                IoC::resolve('init_assets');
 		return View::make('admin.index');
 	}
         
@@ -20,7 +19,6 @@ class Admin_Controller extends Base_Controller {
          * @return View 
          */
         public function get_login() {
-                IoC::resolve('init_assets');
                 return View::make('admin.login');
         }
         
@@ -73,7 +71,6 @@ class Admin_Controller extends Base_Controller {
         public function get_logout() {
             
                 Auth::logout();
-                IoC::resolve('init_assets');
                 return View::make('admin.logged-out');
             
         }
