@@ -4,19 +4,19 @@
 <h1 class="page-header">Manage Alloted Inventory</h1>
 
 <?php
-if ($users) {
+if ($users):
 ?>
 <ul id="user-list" class="unstyled">
 <?php
     foreach($users as $user):
 ?>
-    <li><a href="<?php echo url('admin/dashboard/controls/user_locations/' . $user->details->id) ?>"><?php echo $user->user_name ?></a></li>
+    <li><a href="<?php echo url('admin/dashboard/controls/basic_data/' . $user->details->id) ?>"><?php echo $user->user_name ?></a></li>
 <?php
     endforeach;
 ?>
 </ul>
 <?php
-}
+endif;
 ?>
 
 <div id="user-locations"></div>
@@ -41,7 +41,6 @@ endif;
             e.preventDefault();
             var url = $(this).attr('href');
             $('#user-locations').load(url, function() {
-                alert('Event fired with url: ' + url);
             });
         });
     });
