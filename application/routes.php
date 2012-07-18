@@ -99,6 +99,7 @@ Route::filter('before', function()
 Route::filter('after', function($response)
 {
 	// Do stuff after every request to your application...
+        Log::info('Current page URI: ' . URI::current());
 });
 
 Route::filter('csrf', function()

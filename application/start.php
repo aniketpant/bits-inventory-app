@@ -176,8 +176,7 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
  * IoC Container 
  */
 
-IoC::register('init_assets', function()
-{
+IoC::register('init_assets', function() {
         /* Bootstrap */
         Asset::add('bootstrap', 'css/bootstrap.min.css');
         Asset::add('bootstrap-responsive', 'css/bootstrap-responsive.min.css');
