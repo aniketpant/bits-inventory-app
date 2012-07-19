@@ -278,7 +278,7 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
         public function post_manage_alloted_locations() {
             
                 // Gathering all submitted inputs
-                $input = Input::all();
+                $input = Input::except('user_details_id');
 
                 // Setting rules for the validation
                 $rules = array(
@@ -293,21 +293,29 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                         return Redirect::to('admin/dashboard/controls/manage_alloted_locations')->with_errors($validation)->with_input('only', 'inventory_type_name');
                 }
                 else {
+                        $user_details_id = Input::get('user_details_id');
                         $keys = array_keys($input);
+                        
                         $data_location_details = array();
                         foreach ($keys as $key) {
-                            $user = User_Master::with(array('details'))->where('user_name', '=', $key)->first();
+                            $user = User_Details::with(array('role' => function($query) {
+                                $query->where('role_name', '=', $key);
+                            }))->find($user_details_id);
+                            
                             foreach ($input[$key] as $row) {
                                 $location = Location_Master::where('location_name', '=', $row)->first();
 
                                 $data = array(
-                                   'location_master_id'     => $location->id,
-                                    'user_details_id'       => $user->details->id,
+                                    'location_master_id'     => $location->id,
+                                    'user_role_details_id'   => $user->role[0]->pivot->id,
                                 );
 
                                 array_push($data_location_details, $data);
                             }
                         }
+                        
+                        print_r($data_location_details);
+                        
                         Location_Details::insert($data_location_details);
 
                         return Redirect::to('admin/dashboard/controls/manage_alloted_locations');
@@ -461,24 +469,31 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
         public function get_alloted_locations($id) {
             
                 $data_locations = Location_Master::get();
-                $user = User_Details::with(array('details', 'details.location'))->find($id);
+                $user = User_Details::with(array('role', 'role.location'))->find($id);
 
                 foreach ($data_locations as $data_location) {
                     $locations[$data_location->location_name] = $data_location->location_name;
                 }
+                
+                $user_role_details = User_Role_Details::with(array('master', 'location'))->where('user_details_id', '=', $user->id)->get();
 
-                $user_location = array();
-
-                foreach ($user as $user_data) {
-                    $location_name = array();
-                    foreach ($user_data->details->location as $row) {
-                        array_push($location_name, $row->location_name);
+                $user_roles = array();
+                $user_role_locations = array();
+                $data_user_role_locations = array();
+                
+                foreach ($user_role_details as $user_role_detail) {
+                    $user_role = User_Role_Master::find($user_role_detail->user_role_master_id);
+                    foreach ($user_role_detail->location as $location) {
+                        array_push($data_user_role_locations, $location->location_name);
                     }
-
-                    $user_location[$user_data->user_name] = $location_name;
+                    $user_role_locations[$user_role->role_name] = $data_user_role_locations;
                 }
                 
-                return View::make('admin.user-alloted-locations');
+                foreach ($user->role as $row) {
+                    array_push($user_roles, $row->role_name);
+                }
+                
+                return View::make('admin.user-alloted-locations')->with(array('user' => $user, 'user_roles' => $user_roles, 'locations' => $locations, 'user_role_locations' => $user_role_locations));
         }
     
 }
