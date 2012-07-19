@@ -9,6 +9,8 @@
     
     <div id="search-result"></div>
     
+    <div id="user-location-form"></div>
+    
 </div>
 
 @section('scripts')
