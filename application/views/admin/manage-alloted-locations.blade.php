@@ -2,17 +2,16 @@
 
 @section('content')
 <h1 class="page-header">Manage Alloted Locations</h1>
+
+<?php Session::put('primary_uri', URI::current()); ?>
+
 @include('admin.search-form')
 @endsection
 
 @section('errors')
-<?php
-if($errors):
-    foreach ($errors->all() as $error):
-?>
-<p class="alert alert-error"><?php echo $error; ?></p>
-<?php
-    endforeach;
-endif;
-?>
+@if($errors)
+@foreach ($errors->all() as $error)
+    <p class="alert alert-error"><?php echo $error; ?></p>
+@endforeach
+@endif
 @endsection
