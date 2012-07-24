@@ -9,6 +9,7 @@ class Admin_Controller extends Base_Controller {
          * 
          * @return View
          */
+        
 	public function get_index() {
 		return View::make('admin.index');
 	}
@@ -18,6 +19,7 @@ class Admin_Controller extends Base_Controller {
          * 
          * @return View 
          */
+        
         public function get_login() {
                 return View::make('admin.login');
         }
@@ -27,6 +29,7 @@ class Admin_Controller extends Base_Controller {
          * 
          * @return View
          */
+        
         public function post_login() {
 
                 // Gathering all submitted inputs
@@ -68,11 +71,15 @@ class Admin_Controller extends Base_Controller {
 
         }
         
+        /**
+         * Logout
+         * 
+         * @return View
+         */
+        
         public function get_logout() {
-            
                 Auth::logout();
                 return View::make('admin.logged-out');
-            
         }
         
 }

@@ -28,7 +28,8 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
             
                 $user_roles = User_Role_Master::get();
 
-                return View::make('admin.manage-user-roles')->with(array('user_roles' => $user_roles));
+                return View::make('admin.manage-user-roles')->with(array(
+                    'user_roles' => $user_roles));
                 
         }
         
@@ -79,7 +80,8 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
             
                 $locations = Location_Master::get();
 
-                return View::make('admin.manage-locations')->with(array('locations' => $locations));
+                return View::make('admin.manage-locations')->with(array(
+                    'locations' => $locations));
                 
         }
         
@@ -136,7 +138,9 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                     $user_roles[$user_role->role_name] = $user_role->role_name;
                 }
 
-                return View::make('admin.manage-users')->with(array('users' => $users, 'user_roles' => $user_roles));
+                return View::make('admin.manage-users')->with(array(
+                    'users' => $users,
+                    'user_roles' => $user_roles));
                 
         }
         
@@ -215,7 +219,8 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
             
                 $inventory_types = Inventory_Type_Master::get();
 
-                return View::make('admin.manage-inventory-types')->with(array('inventory_types' => $inventory_types));
+                return View::make('admin.manage-inventory-types')->with(array(
+                    'inventory_types' => $inventory_types));
                 
         }
         
@@ -333,7 +338,7 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
         public function get_manage_alloted_inventory_types() {
             
                 $data_inventory_types = Inventory_Type_Master::get();
-                $user_roles = User_Role_Master::with(array('inventory'))->get();
+                $user_roles = User_Role_Master::with(array('inventory_type'))->get();
 
                 foreach ($data_inventory_types as $data_inventory_type) {
                     $inventory_types[$data_inventory_type->inventory_type_name] = $data_inventory_type->inventory_type_name;
@@ -343,7 +348,7 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
 
                 foreach ($user_roles as $user_role) {
                     $user_role_inventory_type = array();
-                    foreach ($user_role->inventory as $row) {
+                    foreach ($user_role->inventory_type as $row) {
                         array_push($user_role_inventory_type, $row->inventory_type_name);
                     }
 
@@ -413,9 +418,7 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
         
         public function get_manage_alloted_inventory() {
             
-                $users = User_Master::with('details')->get();
-
-                return View::make('admin.manage-alloted-inventory')->with(array('users' => $users));
+                return View::make('admin.manage-alloted-inventory');
             
         }
         
@@ -429,7 +432,7 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
         public function post_manage_alloted_inventory() {
             
                 // Gathering all submitted inputs
-                $input = Input::all();
+                $input = Input::get('inventory_data');
 
                 // Setting rules for the validation
                 $rules = array(
@@ -444,43 +447,78 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                         return Redirect::to('admin/dashboard/controls/manage_alloted_inventory')->with_errors($validation)->with_input('only', 'inventory_type_name');
                 }
                 else {
+                        $keys1 = array_keys($input);
+                        $arr_data = array();
+                        $arr_row = array();
+                        foreach ($keys1 as $key1) {
+                            $keys2 = array_keys($input[$key1]);
+                            foreach ($keys2 as $key2) {
+                                $arr_row['location_details_id'] = $key1;
+                                $arr_row['inventory_type_details_id'] = $key2;
+                                $arr_row['value'] = $input[$key1][$key2];
+                                array_push($arr_data, $arr_row);
+                            }
+                        }
+                        
+                        Inventory_Details::insert($arr_data);
+                        
                         return Redirect::to('admin/dashboard/controls/manage_alloted_inventory');
                 }
                 
         }
         
-        public function get_basic_data($id) {
-            
-                $user_data = User_Details::with(array('location', 'role'))->find($id);
-                $roles = $user_data->role;
-                $locations = $user_data->location;
-                
-                return View::make('admin.user-basic-data')->with(array('locations' => $locations, 'roles' => $roles));
-            
-        }
-        
         public function get_search($username) {
             
-                $users = User_Master::with(array('details'))->where('user_name', 'like', '%' . $username . '%')->get();
+                $users = User_Master::with(array(
+                    'details'))->where('user_name', 'like', '%' . $username . '%')->get();
                 return View::make('admin.search-results')->with(array('users' => $users));
+        }
+        
+        public function get_basic_data($id) {
+            
+                $user_data = User_Details::with(array(
+                    'location',
+                    'role'))->find($id);
+                $roles = $user_data->role;
+                $locations = $user_data->location;
+
+                return View::make('admin.user-basic-data')->with(array(
+                    'locations' => $locations,
+                    'roles' => $roles));
             
         }
         
-        public function get_alloted_locations($id) {
+        public function get_user_roles($id) {
+                
+                $roles = User_Role_Master::with(array(
+                    'details' => function($query) use ($id) {
+                        $query->where('user_details_id', '=', $id);}))->get();
+                
+                return View::make('admin.user-roles-data')->with(array(
+                    'roles' => $roles));
+                
+        }
+        
+        public function get_alloted_locations($user_details_id) {
             
                 $data_locations = Location_Master::get();
-                $user = User_Details::with(array('role', 'role.location'))->find($id);
+                
+                $user = User_Details::with(array(
+                    'role',
+                    'role.location'))->find($user_details_id);
 
                 foreach ($data_locations as $data_location) {
                     $locations[$data_location->location_name] = $data_location->location_name;
                 }
-                
-                $user_role_details = User_Role_Details::with(array('master', 'location'))->where('user_details_id', '=', $user->id)->get();
+
+                $user_role_details = User_Role_Details::with(array(
+                    'master',
+                    'location'))->where('user_details_id', '=', $user->id)->get();
 
                 $user_roles = array();
                 $user_role_locations = array();
                 $data_user_role_locations = array();
-                
+
                 foreach ($user_role_details as $user_role_detail) {
                     $user_role = User_Role_Master::find($user_role_detail->user_role_master_id);
                     foreach ($user_role_detail->location as $location) {
@@ -488,12 +526,57 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                     }
                     $user_role_locations[$user_role->role_name] = $data_user_role_locations;
                 }
-                
+
                 foreach ($user->role as $row) {
                     array_push($user_roles, $row->role_name);
                 }
+
+                return View::make('admin.user-alloted-locations')->with(array(
+                    'user' => $user,
+                    'user_roles' => $user_roles,
+                    'locations' => $locations,
+                    'user_role_locations' => $user_role_locations));
+        
+        }
                 
-                return View::make('admin.user-alloted-locations')->with(array('user' => $user, 'user_roles' => $user_roles, 'locations' => $locations, 'user_role_locations' => $user_role_locations));
+        public function get_alloted_inventory($user_details_id, $user_role_master_id, $user_role_details_id) {
+            
+                $user_role_master = User_Role_Master::with(array(
+                    'inventory_type'))->find($user_role_master_id);
+                    
+                $user_role_details = User_Role_Details::with(array(
+                    'location'))->find($user_role_details_id);
+                
+                $user_locations = array();
+                $user_inventory_types = array();
+                $arr_location_details_id = array();
+
+                // Printing locations
+                foreach ($user_role_details->location as $row) {
+                    array_push($arr_location_details_id, $row->id);
+                    array_push($user_locations, $row);
+                }
+                
+                echo '<br/>';
+                
+                // Printing inventory_types
+                foreach ($user_role_master->inventory_type as $row) {
+                    array_push($user_inventory_types, $row);
+                }
+                
+                $inventory_data = Inventory_Details::where_in('location_details_id', $arr_location_details_id)->get();
+                
+                $inventory = array();
+                
+                foreach ($inventory_data as $row) {
+                    $inventory[$row->location_details_id][$row->inventory_type_details_id] = $row->value;
+                }
+                
+                return View::make('admin.user-alloted-inventory')->with(array(
+                    'user_locations' => $user_locations,
+                    'user_inventory_types' => $user_inventory_types,
+                    'inventory' => $inventory));
+                
         }
     
 }

@@ -19,7 +19,6 @@ class Home_Controller extends Base_Controller {
          * @return View 
          */
         public function get_login() {
-                Log::info('This is the login page.');
                 return View::make('home.login');
         }
         
