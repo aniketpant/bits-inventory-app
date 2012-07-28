@@ -25,11 +25,8 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
          */
         
         public function get_manage_user_roles() {
-            
-                $user_roles = User_Role_Master::get();
 
-                return View::make('admin.manage-user-roles')->with(array(
-                    'user_roles' => $user_roles));
+                return View::make('admin.manage-user-roles');
                 
         }
         
@@ -77,11 +74,8 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
          */
         
         public function get_manage_locations() {
-            
-                $locations = Location_Master::get();
 
-                return View::make('admin.manage-locations')->with(array(
-                    'locations' => $locations));
+                return View::make('admin.manage-locations');
                 
         }
         
@@ -129,8 +123,6 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
          */
         
         public function get_manage_users() {
-            
-                $users = User_Master::with(array('details', 'details.role'))->get();
 
                 $user_roles_master = User_Role_Master::get('role_name');
                 $user_roles = array();                        
@@ -139,7 +131,6 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 }
 
                 return View::make('admin.manage-users')->with(array(
-                    'users' => $users,
                     'user_roles' => $user_roles));
                 
         }
@@ -177,14 +168,14 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 else {
                         $user_name = $input['user_name'];
                         $psrn = $input['psrn'];
-                        $role_name = $input['user_role'];
+                        $user_roles = $input['user_roles'];
 
-                        // Credentials for user
+                        // Credentials for the new user
                         $credentials = array(
-                            'user_name' =>  $user_name,
-                            'password'  =>  Hash::make($user_name),
-                            'role_name' =>  $role_name,
-                            'psrn'      =>  $psrn,
+                            'user_name'     =>  $user_name,
+                            'password'      =>  Hash::make($user_name),
+                            'user_roles'    =>  $user_roles,
+                            'psrn'          =>  $psrn,
                         );
 
                         $user = User_Master::create(array(
@@ -193,19 +184,20 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                             ));
 
                         $data_user_details = new User_Details(array('psrn' => $credentials['psrn']));
-
+                        
                         $user_details = $user->details()->insert($data_user_details);
+                        
+                        $user_role_master = User_Role_Master::where_in('role_name', $user_roles)->get();
 
-                        $user_role_master = User_Role_Master::where('role_name', '=', $credentials['role_name'])->first();
-
-                        $user_role_details = User_Role_Details::create(array(
-                            'user_details_id'       =>  $user_details->id,
-                            'user_role_master_id'   =>  $user_role_master->id,
-                            ));
+                        foreach ($user_role_master as $row) {
+                            $user_role_details = User_Role_Details::create(array(
+                                'user_details_id'       =>  $user_details->id,
+                                'user_role_master_id'   =>  $row->id,
+                                ));
+                        }
 
                         return Redirect::to('admin/dashboard/controls/manage_users');
                 }
-                
         }
         
         /**
@@ -216,11 +208,8 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
          */
         
         public function get_manage_inventory_types() {
-            
-                $inventory_types = Inventory_Type_Master::get();
 
-                return View::make('admin.manage-inventory-types')->with(array(
-                    'inventory_types' => $inventory_types));
+                return View::make('admin.manage-inventory-types');
                 
         }
         
@@ -467,115 +456,206 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                 
         }
         
-        public function get_search($username) {
-            
-                $users = User_Master::with(array(
-                    'details'))->where('user_name', 'like', '%' . $username . '%')->get();
-                return View::make('admin.search-results')->with(array('users' => $users));
-        }
+        /**
+         * Admin/Dashboard/Controls/User_Role_Master
+         * Function to get roles of a user via ajax call
+         * 
+         * @return View
+         */
         
-        public function get_basic_data($id) {
+        public function get_user_role_master() {
             
-                $user_data = User_Details::with(array(
-                    'location',
-                    'role'))->find($id);
-                $roles = $user_data->role;
-                $locations = $user_data->location;
+                $user_roles = User_Role_Master::get();
 
-                return View::make('admin.user-basic-data')->with(array(
-                    'locations' => $locations,
-                    'roles' => $roles));
-            
-        }
-        
-        public function get_user_roles($id) {
-                
-                $roles = User_Role_Master::with(array(
-                    'details' => function($query) use ($id) {
-                        $query->where('user_details_id', '=', $id);}))->get();
-                
-                return View::make('admin.user-roles-data')->with(array(
-                    'roles' => $roles));
+                return View::make('admin.get-user-role-master')->with(array(
+                    'user_roles' => $user_roles));
                 
         }
         
-        public function get_alloted_locations($user_details_id) {
+        /**
+         * Admin/Dashboard/Controls/Location_Master
+         * Function to get locations alloted to a user via ajax call
+         * 
+         * @return View
+         */
+        
+        public function get_location_master() {
             
-                $data_locations = Location_Master::get();
-                
-                $user = User_Details::with(array(
-                    'role',
-                    'role.location'))->find($user_details_id);
+                $locations = Location_Master::get();
 
-                foreach ($data_locations as $data_location) {
-                    $locations[$data_location->location_name] = $data_location->location_name;
+                return View::make('admin.get-location-master')->with(array(
+                    'locations' => $locations));
+                
+        }
+        
+        /**
+         * Admin/Dashboard/Controls/Inventory_Type_Master
+         * Function to get inventory types alloted to a user via ajax call
+         * 
+         * @return View
+         */
+        
+        public function get_inventory_type_master() {
+            
+                $inventory_types = Inventory_Type_Master::get();
+
+                return View::make('admin.get-inventory-type-master')->with(array(
+                    'inventory_types' => $inventory_types));
+                
+        }
+        
+        /**
+         * Admin/Dashboard/Controls/User_Master
+         * Function to get all users data via ajax call
+         * 
+         * @return View
+         */
+        
+        public function get_user_master() {
+            
+                $users = User_Master::with(array('details', 'details.role'))->get();
+                $user_roles_master = User_Role_Master::get('role_name');
+                
+                $user_roles = array();                        
+                foreach ($user_roles_master as $user_role) {
+                    $user_roles[$user_role->role_name] = $user_role->role_name;
                 }
-
-                $user_role_details = User_Role_Details::with(array(
-                    'master',
-                    'location'))->where('user_details_id', '=', $user->id)->get();
-
-                $user_roles = array();
-                $user_role_locations = array();
-                $data_user_role_locations = array();
-
-                foreach ($user_role_details as $user_role_detail) {
-                    $user_role = User_Role_Master::find($user_role_detail->user_role_master_id);
-                    foreach ($user_role_detail->location as $location) {
-                        array_push($data_user_role_locations, $location->location_name);
-                    }
-                    $user_role_locations[$user_role->role_name] = $data_user_role_locations;
-                }
-
-                foreach ($user->role as $row) {
-                    array_push($user_roles, $row->role_name);
-                }
-
-                return View::make('admin.user-alloted-locations')->with(array(
-                    'user' => $user,
-                    'user_roles' => $user_roles,
-                    'locations' => $locations,
-                    'user_role_locations' => $user_role_locations));
-        
-        }
                 
-        public function get_alloted_inventory($user_details_id, $user_role_master_id, $user_role_details_id) {
+                return View::make('admin.get-user-master')->with(array(
+                    'users' => $users,
+                    'user_roles' => $user_roles));
             
-                $user_role_master = User_Role_Master::with(array(
-                    'inventory_type'))->find($user_role_master_id);
+        }
+        
+        /**
+         * Admin/Dashboard/Controls/Update_Master
+         * Function to update master records via ajax call
+         * 
+         * @param string $table Table Name
+         */
+        
+        public function post_update_master() {
+            
+                $table = Input::get('table');
+                $id = Input::get('id');
+                $value = Input::get('value');
+
+                switch ($table) {                
+                    case 'user_role_master':
+                        $user_role_master = User_Role_Master::find($id);
+                        $user_role_master->role_name = $value;
+
+                        $check = $user_role_master->save();
+                        break;
+
+                    case 'location_master':
+                        $location_master = Location_Master::find($id);
+                        $location_master->location_name = $value;
+
+                        $check = $location_master->save();
+
+                        break;
+
+                    case 'inventory_type_master':
+                        $inventory_type_master = Inventory_Type_Master::find($id);
+                        $inventory_type_master->inventory_type_name = $value;
+
+                        $check = $inventory_type_master->save();
+                        break;
+
+                    default:
+                        break;
+                }
+                
+                if ($check) {
+                    return TRUE;
+                }
+                else {
+                    return FALSE;
+                }
+            
+        }
+        
+        /**
+         * Admin/Dashboard/Controls/Upadate_User
+         * Function to update user details via ajax call
+         * 
+         * @return bool
+         */
+        
+        public function post_update_user() {
+            
+                $id = Input::get('id');
+                $user_name = Input::get('user_name');
+                $psrn = Input::get('psrn');
+
+                $user = User_Details::find($id);
+                $user->psrn = $psrn;
+                
+                $check = $user->save();
+                
+                if ($check) {
+                    return TRUE;
+                }
+                else {
+                    return FALSE;
+                }
+            
+        }
+        
+        /**
+         * Admin/Dashboard/Controls/Update_Field
+         * Function to update specific field via ajax call
+         * 
+         * @return View
+         */
+        
+        public function post_update_field() {
+            
+                $field = Input::get('field');
+                $message = '';
                     
-                $user_role_details = User_Role_Details::with(array(
-                    'location'))->find($user_role_details_id);
-                
-                $user_locations = array();
-                $user_inventory_types = array();
-                $arr_location_details_id = array();
+                if ($field == 'user_role') {
+                    $id = Input::get('id');
+                    $user_roles = Input::get('user_roles');
+                    
+                    if (!is_array($user_roles)) {
+                        $user_roles = array();
+                    }
+                    
+                    $user = User_Details::with(array(
+                        'role'
+                        ))->find($id);
 
-                // Printing locations
-                foreach ($user_role_details->location as $row) {
-                    array_push($arr_location_details_id, $row->id);
-                    array_push($user_locations, $row);
+                    $roles = array();
+                    
+                    foreach ($user->role as $role) {
+                        array_push($roles, $role->role_name);
+                        $location_count[$role->role_name] = Location_Details::where('user_role_details_id', '=', $role->pivot->id)->count();
+                    }
+                    
+                    $arr_add = array();
+                    $arr_del = array();
+                    $del = null;
+                    
+                    $arr_add = array_diff($user_roles, $roles);
+                    $arr_del = array_diff($roles, $user_roles);
+                    
+                    foreach ($arr_del as $del) {
+                        if ($location_count[$del] == 0) {
+                            // delete location
+                        }
+                        else {
+                            $message = $del . ' cannot be deleted.';
+                        }
+                    }
+                    
                 }
                 
-                echo '<br/>';
-                
-                // Printing inventory_types
-                foreach ($user_role_master->inventory_type as $row) {
-                    array_push($user_inventory_types, $row);
-                }
-                
-                $inventory_data = Inventory_Details::where_in('location_details_id', $arr_location_details_id)->get();
-                
-                $inventory = array();
-                
-                foreach ($inventory_data as $row) {
-                    $inventory[$row->location_details_id][$row->inventory_type_details_id] = $row->value;
-                }
-                
-                return View::make('admin.user-alloted-inventory')->with(array(
-                    'user_locations' => $user_locations,
-                    'user_inventory_types' => $user_inventory_types,
-                    'inventory' => $inventory));
+                return View::make('admin.messages')->with(array(
+                        'id'        => $id,
+                        'message'   => $message,
+                        'deleted'   => $del));
                 
         }
     

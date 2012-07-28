@@ -60,6 +60,7 @@ class Admin_Controller extends Base_Controller {
                                 $role_name = $user_role->role_name;
 
                                 if ($role_name == 'Administrator') {
+                                        Session::put('user_type', 'admin');
                                         return Redirect::to('admin/dashboard/base');
                                 }
                                 else {
@@ -79,6 +80,7 @@ class Admin_Controller extends Base_Controller {
         
         public function get_logout() {
                 Auth::logout();
+                Session::flush();
                 return View::make('admin.logged-out');
         }
         
