@@ -5,7 +5,7 @@
 
 <?php Session::put('primary_uri', URI::current()); ?>
 
-@include('admin.search-form')
+@include('common.search-form')
 @endsection
 
 @section('errors')

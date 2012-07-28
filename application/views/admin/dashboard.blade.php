@@ -1,17 +1,31 @@
 @layout('admin.master')
 
 @section('content')
-<div class="hero-unit">
-    <h1>Dashboard</h1>
-    <br/>
-    <h3>Stats <small>Count of various attributes</small></h3>
-    <dl class="dl-horizontal">
-        <dt>Users</dt>
-        <dd><?php echo $stats['users']; ?></dd>
-        <dt>Locations</dt>
-        <dd><?php echo $stats['locations']; ?></dd>
-        <dt>Inventory Types</dt>
-        <dd><?php echo $stats['inventory_types']; ?></dd>
-    </dl>
-</div>
+<h1>Dashboard <small>The admin dashboard</small></h1>
+
+<h3>Stats <small>Count of various attributes</small></h3>
+<table class="table table-condensed">
+    <thead>
+    <th>Attribute</th>
+    <th>Count</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Users</td>
+            <td>{{ $stats['users'] }}</td>
+        </tr>
+        <tr>
+            <td>User Roles</td>
+            <td>{{ $stats['user_roles'] }}</td>
+        </tr>
+        <tr>
+            <td>Locations</td>
+            <td>{{ $stats['locations'] }}</td>
+        </tr>
+        <tr>
+            <td>Inventory Types</td>
+            <td>{{ $stats['inventory_types'] }}</td>
+        </tr>
+    </tbody>
+</table>
 @endsection

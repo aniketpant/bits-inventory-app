@@ -15,7 +15,7 @@
             <div class="navbar-inner">
                 
                 <div class="container">
-                    <a class="brand" href="<?php echo url('home') ?>">Inventory Management System</a>
+                    <a class="brand" href="<?php echo url('user') ?>">Inventory Management System</a>
 
                     <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -49,8 +49,10 @@
             <div class="alert alert-danger pull-right"><strong>Attention!</strong> Only admins allowed.</div>
             @yield('content')
         </div>
+        
             @yield('errors')
-        </div>
+            
+    </div>
         
     <div class="container">
         <footer role="contentinfo" class="footer">
