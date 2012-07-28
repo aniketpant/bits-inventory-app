@@ -34,7 +34,7 @@
 
 Route::get('/', function()
 {
-	return View::make('home.index');
+	return View::make('user.index');
 });
 
 /*
@@ -118,14 +118,18 @@ Route::filter('auth', function()
  * Custom Routes
  */
 
-// Registering home controller
-Route::controller('home');
+Route::controller('common');
 
 // Registering admin controllers
 Route::controller('admin.dashboard.base');
 Route::controller('admin.dashboard.controls');
 Route::controller('admin.dashboard');
 Route::controller('admin');
+
+// Registering user controllers
+Route::controller('user.dashboard.base');
+Route::controller('user.dashboard');
+Route::controller('user');
 
 // Adding filters
 Route::filter('pattern: user/dashboard/*', 'auth');
