@@ -15,7 +15,7 @@
     <td>{{ $location->location_name }}</td>
     @foreach($user_inventory_types as $inventory_type)
     <td>
-        {{ $inventory[$location->id][$inventory_type->id] }}
+        {{ $inventory[$location->pivot->id][$inventory_type->id] }}
     </td>
     @endforeach
 </tr>

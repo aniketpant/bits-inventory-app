@@ -148,7 +148,7 @@ class Common_Controller extends Base_Controller {
 
                 // locations
                 foreach ($user_role_details->location as $row) {
-                    array_push($arr_location_details_id, $row->id);
+                    array_push($arr_location_details_id, $row->pivot->id);
                     array_push($user_locations, $row);
                 }
                 
@@ -157,13 +157,15 @@ class Common_Controller extends Base_Controller {
                     array_push($user_inventory_types, $row);
                 }
                 
-                $inventory_data = Inventory_Details::where_in('location_details_id', $arr_location_details_id)->get();
-                
                 $inventory = array();
                 
-                // inventory
-                foreach ($inventory_data as $row) {
-                    $inventory[$row->location_details_id][$row->inventory_type_details_id] = $row->value;
+                if (array_count_values($arr_location_details_id)) {
+                    $inventory_data = Inventory_Details::where_in('location_details_id', $arr_location_details_id)->get();
+                
+                    // inventory
+                    foreach ($inventory_data as $row) {
+                        $inventory[$row->location_details_id][$row->inventory_type_details_id] = $row->value;
+                    }
                 }
                 
                 if ($user_type == 'admin') {

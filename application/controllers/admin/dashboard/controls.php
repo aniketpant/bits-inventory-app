@@ -296,21 +296,56 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                                 $query->where('role_name', '=', $key);
                             }))->find($user_details_id);
                             
-                            foreach ($input[$key] as $row) {
-                                $location = Location_Master::where('location_name', '=', $row)->first();
+                            $curr_user_role_details_id = $user->role[0]->pivot->id;
+                            
+                            $curr_user_locs = User_Role_Details::with(array(
+                                'location'))->find($curr_user_role_details_id);
+                            
+                            $existing_locs = array();
+                            $new_locs = $input[$key];
+                                
+                            foreach ($curr_user_locs->location as $curr_user_loc) {
+                                array_push($existing_locs, $curr_user_loc->location_name);
+                            }
+                            
+                            $locs_add = array();
+                            $locs_del = array();
+                            
+                            $locs_add = array_diff($new_locs, $existing_locs);
+                            $locs_del = array_diff($existing_locs, $new_locs);
+                            
+                            // Adding new locations
+                            if (array_count_values($locs_add)) {
+                                foreach ($locs_add as $row) {
+                                    $location = Location_Master::where('location_name', '=', $row)->first();
 
-                                $data = array(
-                                    'location_master_id'     => $location->id,
-                                    'user_role_details_id'   => $user->role[0]->pivot->id,
-                                );
+                                    $data = array(
+                                        'location_master_id'     => $location->id,
+                                        'user_role_details_id'   => $curr_user_role_details_id,
+                                    );
 
-                                array_push($data_location_details, $data);
+                                    array_push($data_location_details, $data);
+                                }
+                            }
+                            
+                            // Checking if inventory alloted in that location
+                            if (array_count_values($locs_del)) {
+                                foreach ($locs_del as $loc_del) {
+                                    $location_master = Location_Master::where('location_name', '=', $loc_del)->first();
+                                    $location = Location_Details::where('user_role_details_id', '=', $curr_user_role_details_id)->where('location_master_id', '=', $location_master->id)->first();
+
+                                    $check = Inventory_Details::where('location_details_id', '=', $location->id)->count();
+
+                                    if (!$check) {
+                                        $location->delete(); // removing location if not alloted
+                                    }
+                                }
                             }
                         }
                         
-                        print_r($data_location_details);
-                        
-                        Location_Details::insert($data_location_details);
+                        if (array_count_values($data_location_details)) {
+                            Location_Details::insert($data_location_details);
+                        }
 
                         return Redirect::to('admin/dashboard/controls/manage_alloted_locations');
                 }
@@ -378,20 +413,57 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                         $data_inventory_type_details = array();
 
                         foreach ($keys as $key) {
-                            $user_role = User_Role_Master::where('role_name', '=', str_replace('_', ' ', $key))->first();
-
-                            foreach ($input[$key] as $row) {
-                                $inventory_type = Inventory_Type_Master::where('inventory_type_name', '=', $row)->first();
-
-                                $data = array(
-                                    'inventory_type_master_id'  => $inventory_type->id,
-                                    'user_role_master_id'       => $user_role->id,
-                                );
-
-                                array_push($data_inventory_type_details, $data);
+                            $user_role = User_Role_Master::with(array('inventory_type'))->where('role_name', '=', str_replace('_', ' ', $key))->first();
+                            
+                            $curr_inventory_types = array();
+                            foreach ($user_role->inventory_type as $row) {
+                                array_push($curr_inventory_types, $row->inventory_type_name);
                             }
+                            
+                            $new_inventory_types = $input[$key];
+                            
+                            $inv_type_add = array();
+                            $inv_type_del = array();
+                            
+                            $inv_type_add = array_diff($new_inventory_types, $curr_inventory_types);
+                            $inv_type_del = array_diff($curr_inventory_types, $new_inventory_types);
+
+                            // Adding new inventory types
+                            if (array_count_values($inv_type_add)) {
+                                foreach ($inv_type_add as $row) {
+                                    $inventory_type = Inventory_Type_Master::where('inventory_type_name', '=', $row)->first();
+
+                                    $data = array(
+                                        'inventory_type_master_id'  => $inventory_type->id,
+                                        'user_role_master_id'       => $user_role->id,
+                                    );
+
+                                    array_push($data_inventory_type_details, $data);
+                                }
+                            }
+
+                            // Deleting inventory types                            
+                            if (array_count_values($inv_type_del)) {
+                                foreach ($inv_type_del as $row) {
+                                    $inventory_type = Inventory_Type_Master::where('inventory_type_name', '=', $row)->first();
+                                    $inventory_type_id = $inventory_type->id;
+                                    
+                                    $inventory_type_details = Inventory_Type_Details::where('user_role_master_id', '=', $user_role->id)->where('inventory_type_master_id', '=', $inventory_type_id)->first();
+                                    $inventory_type_details_id = $inventory_type_details->id;
+                                    
+                                    $check = Inventory_Details::where('inventory_type_details_id', '=', $inventory_type_details_id)->count();
+                                    
+                                    if (!$check) {
+                                        $inventory_type_details->delete(); // removing inventory type if not alloted
+                                    }
+                                }
+                            }
+                            
                         }
-                        Inventory_Type_Details::insert($data_inventory_type_details);
+                        
+                        if ($data_inventory_type_details) {
+                            Inventory_Type_Details::insert($data_inventory_type_details);
+                        }
 
                         return Redirect::to('admin/dashboard/controls/manage_alloted_inventory_types');
                 }
@@ -642,8 +714,7 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                     $arr_del = array_diff($roles, $user_roles);
                     
                     foreach ($arr_del as $del) {
-                        if ($location_count[$del] == 0) {
-                            // delete location
+                        if (!$location_count[$del]) {
                         }
                         else {
                             $message = $del . ' cannot be deleted.';
