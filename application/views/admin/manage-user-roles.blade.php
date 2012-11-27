@@ -9,7 +9,7 @@
     <div class="control-group <?php if($errors->has('user_role_name')) echo 'error'; ?>">
             <?php echo Form::label('user_role_name', 'New User Role', array('class' => 'control-label')); ?>
             <div class="controls">
-                    <?php echo Form::input('user_role_name', 'user_role_name', Input::old('user_role_name')) ?>
+                    <?php echo Form::text('user_role_name', Input::old('user_role_name')) ?>
             </div>
     </div>
     <div class="control-group">

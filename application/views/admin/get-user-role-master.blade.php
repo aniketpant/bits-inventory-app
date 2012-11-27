@@ -42,7 +42,7 @@
         $('a[rel="edit"]').click(function() {
             urlModal = $(this).attr('href');
             $(urlModal).modal();
-        })
+        });
         $('a[rel="update"]').click(function(e) {
             e.preventDefault();
             var urlUpdate = $(this).attr('href');

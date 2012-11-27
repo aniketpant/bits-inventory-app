@@ -72,7 +72,7 @@ return array(
 			'host'     => 'localhost',
 			'database' => 'bits_inv_app',
 			'username' => 'root',
-			'password' => '',
+			'password' => 'admin',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 		),

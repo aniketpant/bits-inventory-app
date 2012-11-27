@@ -10,9 +10,9 @@ class Admin_Controller extends Base_Controller {
          * @return View
          */
         
-	public function get_index() {
-		return View::make('admin.index');
-	}
+    	public function get_index() {
+    		return View::make('admin.index');
+    	}
         
         /**
          * Admin Login Page

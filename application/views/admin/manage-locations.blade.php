@@ -9,7 +9,7 @@
 <div class="control-group <?php if($errors->has('location_name')) echo 'error'; ?>">
         <?php echo Form::label('location_name', 'New Location', array('class' => 'control-label')); ?>
         <div class="controls">
-                <?php echo Form::input('location_name', 'location_name', Input::old('location_name')) ?>
+                <?php echo Form::text('location_name', Input::old('location_name')) ?>
         </div>
 </div>
 <div class="control-group">

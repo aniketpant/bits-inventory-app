@@ -9,7 +9,7 @@
 <div class="control-group <?php if($errors->has('inventory_type_name')) echo 'error'; ?>">
         <?php echo Form::label('inventory_type_name', 'New Inventory Type', array('class' => 'control-label')); ?>
         <div class="controls">
-                <?php echo Form::input('inventory_type_name', 'inventory_type_name', Input::old('inventory_type_name')) ?>
+                <?php echo Form::text('inventory_type_name', Input::old('inventory_type_name')) ?>
         </div>
 </div>
 <div class="control-group">

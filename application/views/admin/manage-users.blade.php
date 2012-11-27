@@ -9,13 +9,13 @@
 <div class="control-group <?php if($errors->has('user_name')) echo 'error'; ?>">
         <?php echo Form::label('user_name', 'User Name', array('class' => 'control-label')); ?>
         <div class="controls">
-                <?php echo Form::input('user_name', 'user_name', Input::old('user_name')) ?>
+                <?php echo Form::text('user_name', Input::old('user_name')) ?>
         </div>
 </div>
 <div class="control-group <?php if($errors->has('psrn')) echo 'error'; ?>">
         <?php echo Form::label('psrn', 'PSRN', array('class' => 'control-label')); ?>
         <div class="controls">
-                <?php echo Form::input('psrn', 'psrn', Input::old('psrn')) ?>
+                <?php echo Form::text('psrn', Input::old('psrn')) ?>
         </div>
 </div>
 <div class="control-group <?php if($errors->has('user_roles')) echo 'error'; ?>">

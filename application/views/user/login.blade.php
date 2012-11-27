@@ -7,7 +7,7 @@
         <div class="control-group <?php if($errors->has('username')) echo 'error'; ?>">
                 <?php echo Form::label('username', 'Username', array('class' => 'control-label')); ?>
                 <div class="controls">
-                        <?php echo Form::input('username', 'username', Input::old('username')) ?>
+                        <?php echo Form::text('username', Input::old('username')) ?>
                 </div>
         </div>
         <div class="control-group <?php if($errors->has('password')) echo 'error'; ?>">

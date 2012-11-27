@@ -1,13 +1,13 @@
 @layout('admin.master')
 
 @section('content')
-<h1 class="page-header">Administrator Login <small>Please sign in with your administrator credentials</small></h1>
+<h1 class="page-header">Administrator Login <small>Sign in with your administrator credentials</small></h1>
 <div class="well form-horizontal">
         <?php echo Form::open('admin/login'); ?>
         <div class="control-group <?php if($errors->has('username')) echo 'error'; ?>">
                 <?php echo Form::label('username', 'Username', array('class' => 'control-label')); ?>
                 <div class="controls">
-                        <?php echo Form::input('username', 'username', Input::old('username')) ?>
+                        <?php echo Form::text('username', Input::old('username')) ?>
                 </div>
         </div>
         <div class="control-group <?php if($errors->has('password')) echo 'error'; ?>">

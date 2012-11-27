@@ -343,7 +343,7 @@ class Admin_Dashboard_Controls_Controller extends Base_Controller {
                             }
                         }
                         
-                        if (array_count_values($data_location_details)) {
+                        if (!empty($data_location_details)) {
                             Location_Details::insert($data_location_details);
                         }
 

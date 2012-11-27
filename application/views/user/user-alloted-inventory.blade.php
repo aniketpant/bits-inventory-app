@@ -15,7 +15,7 @@
     <td>{{ $location->location_name }}</td>
     @foreach($user_inventory_types as $inventory_type)
     <th>
-        <?php echo Form::input('text', 'inventory_data[' . $location->id . '][' . $inventory_type->id . ']', $inventory[$location->id][$inventory_type->id], array('class' => 'input-medium')) ?>
+        <?php echo Form::text('inventory_data[' . $location->id . '][' . $inventory_type->id . ']', $inventory[$location->id][$inventory_type->id], array('class' => 'input-medium')) ?>
     </th>
     @endforeach
 </tr>

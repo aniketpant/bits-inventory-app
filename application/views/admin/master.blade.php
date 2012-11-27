@@ -48,11 +48,11 @@
         <div role="main" class="content">                    
             <div class="alert alert-danger pull-right"><strong>Attention!</strong> Only admins allowed.</div>
             @yield('content')
-        </div>
-        
-            @yield('errors')
-            
+        </div>        
+            @yield('scripts') 
+            @yield('errors')           
     </div>
+
         
     <div class="container">
         <footer role="contentinfo" class="footer">
@@ -61,8 +61,6 @@
             </div>
         </footer>
     </div>
-    
-    @yield('scripts')
         
 </body>
 </html>
