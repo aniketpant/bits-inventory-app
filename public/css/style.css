@@ -1,7 +1,22 @@
+html {
+	height: 100%;
+}
+
+body {
+    min-height: 100%;
+    position: relative;
+}
+
 .content {
     margin-top: 50px;
+    min-height: 90%;
 }
 
 .bits {
     font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+.footer {
+	position: absolute;
+	bottom: -20px;
 }
