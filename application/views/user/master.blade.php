@@ -46,21 +46,18 @@
     <div class="container">
         <div role="main" class="content">                    
             @yield('content')
-        </div>
-        
-            @yield('errors')
-            
+        </div>        
+            @yield('errors')     
+            @yield('scripts')       
     </div>
         
     <div class="container">
         <footer role="contentinfo" class="footer">
             <div class="attr">
-                <p class="bits pull-right">&copy; <strong>BITS</strong> Pilani, K K Birla Goa Campus</p>
+                <p class="bits">&copy; <strong>BITS</strong> Pilani, K K Birla Goa Campus</p>
             </div>
         </footer>
     </div>
-    
-    @yield('scripts')
         
 </body>
 </html>

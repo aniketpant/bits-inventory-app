@@ -18,7 +18,7 @@
 @endif
 
 @foreach ($locations as $location)
-<div class="modal hide" id="modal-<?php echo $location->id ?>">
+<div class="modal hide fade" id="modal-<?php echo $location->id ?>">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
         <h3>Update &ldquo;{{ $location->location_name }}&rdquo;</h3>
@@ -41,7 +41,6 @@
         var urlModal;
         $('a[rel="edit"]').click(function() {
             urlModal = $(this).attr('href');
-            $(urlModal).modal();
         })
         $('a[rel="update"]').click(function(e) {
             e.preventDefault();

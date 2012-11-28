@@ -18,9 +18,9 @@
 @endif
 
 @foreach ($user_roles as $user_role)
-<div class="modal hide" id="modal-<?php echo $user_role->id ?>">
+<div class="modal hide fade" id="modal-<?php echo $user_role->id ?>">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>Update &ldquo;{{ $user_role->role_name }}&rdquo;</h3>
     </div>
     <div class="modal-body">
@@ -29,7 +29,7 @@
         <input type="text" name="inputUpdate" value="<?php echo $user_role->role_name ?>" autofocus>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
         <a rel="update" href="<?php echo url('admin/dashboard/controls/update_master') ?>" class="btn btn-primary">Update</a>
     </div>
 </div>
@@ -41,7 +41,6 @@
         var urlModal;
         $('a[rel="edit"]').click(function() {
             urlModal = $(this).attr('href');
-            $(urlModal).modal();
         });
         $('a[rel="update"]').click(function(e) {
             e.preventDefault();

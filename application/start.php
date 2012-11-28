@@ -188,8 +188,8 @@ IoC::register('init_assets', function() {
         Asset::add('select2-js', 'js/select2.min.js');
 
         /* Bootstrap */
-        Asset::add('bootstrap-js', 'js/bootstrap.min.js');
         Asset::add('bootstrap', 'css/bootstrap.min.css');
+        Asset::add('bootstrap-js', 'js/bootstrap.min.js');
 });
 
 /*

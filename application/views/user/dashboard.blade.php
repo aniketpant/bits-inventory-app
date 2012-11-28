@@ -3,7 +3,7 @@
 @section('content')
 <h1>Dashboard <small>Welcome, <?php echo Session::get('username') ?>!</small></h1>
 
-@if($user)
+@if(!empty($user))
 <dl class="dl-horizontal">
     <dt>Username</dt>
     <dd>{{ $user->user_name }}</dd>
